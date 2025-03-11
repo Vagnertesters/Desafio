@@ -1,0 +1,56 @@
+# Configurar o WebDriver
+driver = webdriver.Chrome()  
+driver.get("https://desafio-equipe.vercel.app/")
+driver.maximize_window()
+
+# Preencher os campos do formulário
+driver.find_element(By.ID, "nome_completo").send_keys("Vagner Passos")
+driver.find_element(By.ID, "data_nascimento").send_keys("01/01/1982")
+
+# Cadastrar impressão digital (simulação)
+driver.find_element(By.ID, "botao_cadastrar_biometria").click()
+time.sleep(2)
+
+# Escolher preferência de navegação
+driver.find_element(By.ID, "preferencia_navegacao").click()
+
+# Enviar foto de perfil (substitua pelo caminho correto da imagem no seu sistema)
+driver.find_element(By.ID, "foto_perfil").send_keys("/caminho/para/foto.jpg")
+
+# Escolher preferência de idioma
+idioma_dropdown = driver.find_element(By.ID, "preferencia_idioma")
+idioma_dropdown.send_keys("Português")
+
+# Selecionar nível de privacidade
+privacidade_dropdown = driver.find_element(By.ID, "nivel_privacidade")
+privacidade_dropdown.send_keys("Alto")
+
+# Consentimento para coleta de dados
+driver.find_element(By.ID, "consentimento_coleta_dados").click()
+
+# Finalizar cadastro
+driver.find_element(By.ID, "finalizar_cadastro").click()
+
+# Validar se o cadastro foi realizado com sucesso
+time.sleep(3)
+mensagem_sucesso = driver.find_element(By.ID, "mensagem_sucesso").text
+
+if "Cadastro realizado com sucesso" in mensagem_sucesso:
+    print(" Cadastro realizado com sucesso!")
+else:
+    print("x Erro ao realizar cadastro.")
+
+## Caso de teste
+Dado que estou na página de cadastro de perfil
+Quando eu preencho meu "nome completo" com "Vagner Passos"
+E informo "data de nascimento" com "01/01/1982"
+E cadastro minha impressão digital por biometria
+E escolho minha preferência de navegação
+E envio minha foto de perfil
+E escolho minha "Preferência de Idioma" com "pt-BR"
+E seleciono o "Nível de Privacidade" com "Alto"
+E clico consentimento para coleta de dados
+E clico em Finalizar Cadastro
+Então meu perfil deve ser cadastrado com sucesso
+E eu vejo uma confirmação do cadastro
+Fechar Navegador
