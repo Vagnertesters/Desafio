@@ -35,22 +35,17 @@ driver.find_element(By.ID, "finalizar_cadastro").click()
 time.sleep(3)
 mensagem_sucesso = driver.find_element(By.ID, "mensagem_sucesso").text
 
-if "Cadastro realizado com sucesso" in mensagem_sucesso:
-    print(" Cadastro realizado com sucesso!")
-else:
-    print("x Erro ao realizar cadastro.")
 
 ## Caso de teste
 Dado que estou na página de cadastro de perfil
-Quando eu preencho meu "nome completo" com "Vagner Passos"
-E informo "data de nascimento" com "01/01/1982"
+Quando eu preencho meu "nome completo" com "@nomecompleto"
+E informo "data de nascimento" com "datanascimento"
 E cadastro minha impressão digital por biometria
 E escolho minha preferência de navegação
 E envio minha foto de perfil
-E escolho minha "Preferência de Idioma" com "pt-BR"
-E seleciono o "Nível de Privacidade" com "Alto"
+E escolho minha "Preferência de Idioma" com "@preferenciadeidioma"
+E seleciono o "Nível de Privacidade" com "@niveldeprivacidade"
 E clico consentimento para coleta de dados
 E clico em Finalizar Cadastro
 Então meu perfil deve ser cadastrado com sucesso
-E eu vejo uma confirmação do cadastro
-Fechar Navegador
+
