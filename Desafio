@@ -1,51 +1,49 @@
-# Configurar o WebDriver
-driver = webdriver.Chrome()  
-driver.get("https://desafio-equipe.vercel.app/")
-driver.maximize_window()
+*** Settings ***
+Library    SeleniumLibrary
+Resource    /resources/keywords.robot
+** Variables ***
+#Elementos da página
+${URL}     https://desafio-equipe.vercel.app/
+${Nome_completo}     id=nome
+${Campo_Data_Nascimento}     id=dataNascimento
+${Campo_Impressao_Digital}     id=impressao-digital
+${Escolher_Arquivo}     id=fotoPerfil
+${Campo_Preferencia_Idioma}     id=idioma
+${Campo_Nivel_Privacidade}     id=privacidade
+${Checkbox_Consentimento_Coleta_De_Dados}     id=consentimento
+${Botao_Finalizar_Cadastro}     xpath=//button[contains(@class, 'btn-submit')]
+${Botão_cancelar}     xpath=//button[contains(@class, 'btn-cancel')]
 
-# Preencher os campos do formulário
-driver.find_element(By.ID, "nome_completo").send_keys("Vagner Passos")
-driver.find_element(By.ID, "data_nascimento").send_keys("01/01/1982")
+#preencha campos
+${Nome}    Vagner Passos
+${Data_Nascimento}    28/1/1982
+${Impressao_Digital_Realizada}    id=impressao-digital-text
+${Foto_De_Perfil}    "C:\Users\vagnerpassos\Desktop\gif\Captura de tela 2025-02-24 135324.png"   
+${Idioma_Valor}    pt-br
+${Nivel_Privacidade_Valor}    baixo
 
-# Cadastrar impressão digital (simulação)
-driver.find_element(By.ID, "botao_cadastrar_biometria").click()
-time.sleep(2)
-
-# Escolher preferência de navegação
-driver.find_element(By.ID, "preferencia_navegacao").click()
-
-# Enviar foto de perfil (substitua pelo caminho correto da imagem no seu sistema)
-driver.find_element(By.ID, "foto_perfil").send_keys("/caminho/para/foto.jpg")
-
-# Escolher preferência de idioma
-idioma_dropdown = driver.find_element(By.ID, "preferencia_idioma")
-idioma_dropdown.send_keys("Português")
-
-# Selecionar nível de privacidade
-privacidade_dropdown = driver.find_element(By.ID, "nivel_privacidade")
-privacidade_dropdown.send_keys("Alto")
-
-# Consentimento para coleta de dados
-driver.find_element(By.ID, "consentimento_coleta_dados").click()
-
-# Finalizar cadastro
-driver.find_element(By.ID, "finalizar_cadastro").click()
-
-# Validar se o cadastro foi realizado com sucesso
-time.sleep(3)
-mensagem_sucesso = driver.find_element(By.ID, "mensagem_sucesso").text
-
-
-## Caso de teste
-Dado que estou na página de cadastro de perfil
-Quando eu preencho meu "nome completo" com "@nomecompleto"
-E informo "data de nascimento" com "datanascimento"
-E cadastro minha impressão digital por biometria
-E escolho minha preferência de navegação
-E envio minha foto de perfil
-E escolho minha "Preferência de Idioma" com "@preferenciadeidioma"
-E seleciono o "Nível de Privacidade" com "@niveldeprivacidade"
-E clico consentimento para coleta de dados
-E clico em Finalizar Cadastro
-Então meu perfil deve ser cadastrado com sucesso
+*** Test Cases ***
+Dado que estou na tela Cadastrar Perfil
+    Open Browser    url=${URL}
+    Wait Until Page Contains    text=Cadastrar Perfil de Usuário Inteligente
+Quando preencho o campo "Nome Completo" com @Nome_Completo
+    Input Text    ${Campo_Nome}    text=${Nome}
+E preencho o campo "Data Nascimento" com @Data_Nascimento
+    Input Text    ${Campo_Data_Nascimento}    text=${Data_Nascimento}
+E forneço uma @Impressao_Digital válida no campo “Impressão Digital”
+    Click Element    ${Campo_Impressao_Digital}
+Wait Until Element Is Visible    ${Impressao_Digital_Realizada}
+E realizo o upload de uma imagem com a opção @Escolher_Arquivo no campo "Escolher Arquivo"
+    Choose File    ${Escolher_Arquivo}    ${Foto_De_Perfil}
+E seleciono a opção @Francês no dropdown de sugestões do campo "Preferência de Idioma"
+    Select From List By Value   ${Campo_Preferencia_Idioma}    ${Idioma_Valor}
+E seleciono a opção @Alto no dropdown de sugestões do campo "Nível de Privacidade"
+    Select From List By Value   ${Campo_Nivel_Privacidade}    ${Nivel_Privacidade_Valor}
+E seleciono a checkbox no campo "Aceito a coleta de dados para análise personalizada"
+    Select Checkbox    ${Checkbox_Consentimento_Coleta_De_Dados}
+    Capture Page Screenshot
+E clico em “Finalizar Cadastro”
+    Click Element    ${Botao_Finalizar_Cadastro}
+Então o cadastro é concluído
+    Capture Page Screenshot
 
